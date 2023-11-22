@@ -2,23 +2,39 @@ import socket
 
 
 def client_program():
-    host = socket.gethostname()  # as both code is running on same pc
-    port = 5000  # socket server port number
 
-    client_socket = socket.socket()  # instantiate
-    client_socket.connect((host, port))  # connect to the server
+    # since both codes are running on the same system
+    host = socket.gethostname()
 
-    message = input(" -> ")  # take input
+    # socket server port number
+    port = 5000
 
+    # instantiate a socket
+    client_socket = socket.socket()  
+
+    # connecting to server
+    client_socket.connect((host, port))
+
+    # input message template
+    message = input("\n Client input --> ")  # take input
+
+    # communication loop
     while message.lower().strip() != 'bye':
-        client_socket.send(message.encode())  # send message
-        data = client_socket.recv(1024).decode()  # receive response
 
-        print('Received from server: ' + data)  # show in terminal
+        # sending message to server
+        client_socket.send(message.encode())
 
-        message = input(" -> ")  # again take input
+        # receiving respone from server
+        data = client_socket.recv(1024).decode()
 
-    client_socket.close()  # close the connection
+        # server message template
+        print('\n Message received from server: ' + data)
+
+        # client input message template
+        message = input("\n Client input --> ")
+
+    # close the connection
+    client_socket.close() 
 
 
 if __name__ == '__main__':
