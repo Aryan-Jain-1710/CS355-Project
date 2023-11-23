@@ -20,7 +20,7 @@ def hashfile(file):
 			sha256.update(data)
 
 	# hexdigest() gives a hexadecimal representation of the hashed value of 
-    # all the data passed to the sha256 function with update()
+    	# all the data passed to the sha256 function with update()
 	return sha256.hexdigest()
 
 # f1_hash = hashfile(sys.argv[1])
