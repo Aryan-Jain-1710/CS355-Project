@@ -1,4 +1,5 @@
 import socket
+from main import hashfile, sim_check
 
 
 def client_program():
@@ -15,23 +16,39 @@ def client_program():
     # connecting to server
     client_socket.connect((host, port))
 
-    # input message template
-    message = input("\n Client input --> ")  # take input
+    # client gives the filename
+    client_file = input("\n Client input --> ")  # take input
+
+    # hashing the file given by client
+    message = hashfile(client_file)
 
     # communication loop
     while message.lower().strip() != 'bye':
 
-        # sending message to server
+        # sending the hashed message to server
         client_socket.send(message.encode())
 
-        # receiving respone from server
-        data = client_socket.recv(1024).decode()
+        # receiving hashed respone from server
+        data_server = client_socket.recv(1024).decode()
 
         # server message template
-        print('\n Message received from server: ' + data)
+        print('\n Message received from server: ' + data_server)
 
-        # client input message template
-        message = input("\n Client input --> ")
+        # checking similarity
+        check = sim_check(str(data_server), message)
+
+        # print check
+        print("\n Client and Server have the same content: " + str(check))
+
+        # client gives the filename
+        client_file = input("\n Client input --> ")  # take input
+
+        # if client said bye
+        if (client_file.lower().strip() == 'bye'):
+            break
+
+        # hashing the file given by client
+        message = hashfile(client_file)
 
     # close the connection
     client_socket.close() 

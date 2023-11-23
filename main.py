@@ -23,7 +23,10 @@ def hashfile(file):
     # all the data passed to the sha256 function with update()
 	return sha256.hexdigest()
 
-f1_hash = hashfile(sys.argv[1])
-print(f"Hash: {f1_hash}")
+# f1_hash = hashfile(sys.argv[1])
+# print(f"Hash: {f1_hash}")
 
-
+def sim_check(x, y):
+	if x==y:
+		return True
+	return False
