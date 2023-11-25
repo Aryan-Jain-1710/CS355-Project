@@ -16,39 +16,57 @@ def client_program():
     # connecting to server
     client_socket.connect((host, port))
 
-    # client gives the filename
-    client_file = input("\n Client input --> ")  # take input
 
-    # hashing the file given by client
-    message = hashfile(client_file)
 
-    # communication loop
-    while message.lower().strip() != 'bye':
 
-        # sending the hashed message to server
-        client_socket.send(message.encode())
+    # client generating public key and private key
+    client_key = gen()
 
-        # receiving hashed respone from server
-        data_server = client_socket.recv(1024).decode()
+    # client sending public key to server
+    client_socket.send(client_key.encode())
 
-        # server message template
-        print('\n Message received from server: ' + data_server)
 
-        # checking similarity
-        check = sim_check(str(data_server), message)
 
-        # print check
-        print("\n Client and Server have the same content: " + str(check))
 
-        # client gives the filename
-        client_file = input("\n Client input --> ")  # take input
+    # client list of hashes
+    hash_list = []
 
-        # if client said bye
-        if (client_file.lower().strip() == 'bye'):
-            break
+    # loop for client to enter file names
+    for ctr in range(1,6):
 
-        # hashing the file given by client
-        message = hashfile(client_file)
+        # client inputs file name
+        client_file = input(f"\n Enter name of File {ctr} --> ")
+
+        # hashed output of file content added to list of hashes
+        hash_list.append(hashfile(client_file))
+
+        print(f"\n {client_file} file content successfully hashed!")
+
+
+    # sending the list of hashed files to server
+    client_socket.send(hash_list.encode())
+
+
+
+
+    # receiving hashed response from server
+    data_server = client_socket.recv(1024).decode()
+
+    # server message template
+    print('\n List of server\'s hashed files: ' + data_server)
+
+
+
+
+    # checking similarity
+    print("\n Running similarity check...")
+    check = sim_check(str(data_server), hash_list)
+
+    # print check
+    print("\n Client and Server have the same content on hashed files: " + check)
+
+
+
 
     # close the connection
     client_socket.close() 

@@ -7,10 +7,8 @@ def server_program():
     # geting hostname
     host = socket.gethostname()
 
-    print(host)
-
     # intiating a port number above 1024
-    port = 5000
+    port = 3000
 
     # getting instance of socket
     server_socket = socket.socket()
@@ -38,42 +36,21 @@ def server_program():
         if not data_client:
             # if data is not received break
             break
-        
-        # client message template
-        print("\n List of client\'s hashed files: " + str(data_client))
+            
+        print(data_client)
 
-        # server list of hashes
-        hash_list = []
 
         # client generating public key and private key
-        server_key = gen()
+        # server_key = gen()
 
         # server sending public key to client !!
-        conn.send(server_key.encode())
+        # conn.send(server_key.encode())
 
-
-        # loop for server to enter file names
-        for ctr in range(1,6):
-
-            # server inputs file name
-            server_file = input(f"\n Enter name of File {ctr} --> ")
-
-            # hashed output of file content added to list of hashes
-            hash_list.append(hashfile(server_file))
-
-            print(f"\n {server_file} file content successfully hashed!")
-
-
+        message = "bob is best"
         # send list of hashes to the client !!
-        conn.send(hash_list.encode())  
+        conn.send(message.encode())  
         
-        # checking similarity
-        print("\n Running similarity check...")
-        check = sim_check(str(data_client), hash_list)
-
-        # print check
-        print("\n Client and Server have the same content on hashed files: " + check)
-
+        
     # close the connection
     conn.close()  
 

@@ -26,7 +26,20 @@ def hashfile(file):
 # f1_hash = hashfile(sys.argv[1])
 # print(f"Hash: {f1_hash}")
 
+
+
 def sim_check(x, y):
-	if x==y:
-		return True
-	return False
+
+	if len(x) != 5:
+		return "invalid"
+	elif len(y) != 5:
+		return "invalid"
+	
+	match = []
+
+	for i in x:
+		for j in y:
+			if i == j:
+				match.append[i]
+
+	return len(match) + " matches: " + match
