@@ -21,21 +21,28 @@ def hashfile(file):
 			# Updating the SHA256 hash of the file
 			sha256.update(data)
 
-	# hexdigest() gives a hexadecimal representation of the hashed value of 
-    	# all the data passed to the sha256 function with update()
-	# return sha256.hexdigest()
+	# digest() gives a bytes representation of the hashed value of 
+    # all the data passed to the sha256 function with update()
 	return sha256.digest()
-	# return int.from_bytes(sha256.digest(), byteorder='big')
 
 
-# f1_hash = hashfile(sys.argv[1])
-# print(f"Hash: {f1_hash}")
+def sim_check2(c, s):
+	# if len(x) != 1:
+	# 	print("invalid")
+	# elif len(y) != 1:
+	# 	print("invalid")
+	
+	client_matches = []
+	server_matches = []
 
+	for i in range(len(c)):
+		for j in range(len(s)):
+			if c[i] == s[j] and i not in client_matches and j not in server_matches:
+				client_matches.append(i)
+				server_matches.append(j)
 
-# def hash_file2(message):
-# 	message = bytes(message, 'utf-8')
-# 	return int.from_bytes(sha512(message).digest(), byteorder='big')
-
+	print(str(len(client_matches))+" matches found!")
+	return [client_matches, server_matches]
 
 
 
@@ -48,9 +55,14 @@ def sim_check(x, y):
 	
 	match = []
 
+	for i in range(len(x)):
+		for j in range(len(y)):
+			if x[i] == y[j] and x[i] not in match:
+				match.append
+
 	for i in x:
 		for j in y:
-			if i == j:
+			if (i == j) and (i not in match):
 				match.append(i)
 
 	print(str(len(match)) + " matches found!")
