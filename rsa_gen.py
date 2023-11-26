@@ -41,4 +41,8 @@ def key_gen():
     priv_key = import_private_key('private_key.pem')
     pub_key = import_public_key('public_key.pem')
 
-    return [priv_key, pub_key]
+    return [priv_key, publ_key]
+
+
+def key_gen2():
+    
