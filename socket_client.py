@@ -6,7 +6,7 @@ from rsa_gen import key_gen2
 def client_program():
 
     host = socket.gethostname() # since both codes are running on the same system
-    port = 5000 # socket server port number
+    port = 6000 # socket server port number
     client_socket = socket.socket()  # instantiate a socket
     client_socket.connect((host, port)) # connecting to server
 
@@ -68,7 +68,7 @@ def client_program():
 
     # RECEIVING SERVER FILES !!!
     server_hash_list = []
-    for ctr in range(1,3): 
+    for ctr in range(1,6): 
         b_servfile = client_socket.recv(32) # hashed message as bytes from server
         serverfile_hash = int.from_bytes(b_servfile, "big")  # converting hashed message from bytes to int
         server_hash_list.append(serverfile_hash)  # adding server's hashed message to the server's list of hashes
@@ -93,7 +93,7 @@ def client_program():
     # SENDING CLIENT FILES !!!
     client_hash_list = []
     client_str_list = []
-    for ctr in range(1,3): 
+    for ctr in range(1,6): 
         print("-----------------------------------------------------------------")
 
         client_file = input(f"\nEnter name of File {ctr} --> ") # server inputs file names
