@@ -123,6 +123,8 @@ def server_program():
     # RUNNING SIMILARITY CHECK!!!!
     print("\nRunning similarity check...\n")
     server_matches = sim_check2(client_hash_list, server_hash_list)[1]
+    print(str(len(server_matches))+" matches found!")
+
 
     print("\n-----------------------------------------------------------------")
     print("\nFiles that match with Client:")

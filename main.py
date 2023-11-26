@@ -37,11 +37,13 @@ def sim_check2(c, s):
 
 	for i in range(len(c)):
 		for j in range(len(s)):
-			if c[i] == s[j] and i not in client_matches and j not in server_matches:
+			if c[i] == s[j]:
 				client_matches.append(i)
 				server_matches.append(j)
 
-	print(str(len(client_matches))+" matches found!")
+	client_matches = list(set(client_matches))
+	server_matches = list(set(server_matches))
+
 	return [client_matches, server_matches]
 
 
