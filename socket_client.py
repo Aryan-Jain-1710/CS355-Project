@@ -109,7 +109,7 @@ def client_program():
         b_sign = signature.to_bytes(256, "big") # converting signature from int to bytes
         client_socket.send(b_sign) # sending signature of the hashed message to client
 
-        print(f"\n{client_file} file content successfully hashed, signed and sent!\n")
+        print(f"\n\"{client_file}\" file content successfully hashed, signed and sent!\n")
 
 
 
@@ -129,7 +129,7 @@ def client_program():
         for index in client_matches:
             print(client_str_list[index])
     else:
-        print("None")
+        print("\nNone")
 
     print("\n-----------------------------------------------------------------")
     print("\nClosing connection...\n")
