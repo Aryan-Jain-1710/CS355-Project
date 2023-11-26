@@ -1,5 +1,6 @@
 import socket
 from main import hashfile, sim_check
+from rsa_gen import key_gen2
 
 
 def server_program():
@@ -10,7 +11,7 @@ def server_program():
     print(host)
 
     # intiating a port number above 1024
-    port = 5000
+    port = 6000
 
     # getting instance of socket
     server_socket = socket.socket()
@@ -29,50 +30,98 @@ def server_program():
 
 
 
-    # loop for communication
-    while True:
 
-        # receive data stream. it won't accept data packet greater than 1024 bytes
-        data_client = conn.recv(1024).decode()
+
+    
+    # KEY EXCHANGE !!!!
+    keys = key_gen2()
+    spriv = keys[0]
+    spub = keys[1]
+
+    # sending server n and e
+    sn = spub[0].to_bytes(1000, 'big')
+    se = spub[1].to_bytes(50, 'big')
+    print("\nserver pub e as int:")
+    print(spub[1])
+    print("\nserver pub n as int:")
+    print(spub[0])
+
+    print("\n\nSending server details...\n")
+    conn.send(sn)
+    print("sent server n")
+    conn.send(se)
+    print("sent server e")
+
+    # receiving client n and e
+    print("\n\nReceiving client details...\n")
+    ckeyn = conn.recv(1000)
+    ckeyn = int.from_bytes(ckeyn, "big")
+    print("\nrecd client n:",ckeyn, sep="\n")
+
+    ckeye = conn.recv(50)
+    ckeye = int.from_bytes(ckeye, "big")
+    print("\nrecd client e:",ckeye, sep="\n")
+
+
+
+
+
+
+
+    # SENDING SERVER FILES
+    server_hash_list = []
+    for ctr in range(1, 3): 
+        client_file = input(f"\n Enter name of File {ctr} --> ") # server inputs file names
+
+        b_hashed_file = hashfile(client_file) # hashing the content of the file inputted
+        hashed_file = int.from_bytes(b_hashed_file, "big")
+        server_hash_list.append(hashed_file)
+        conn.send(b_hashed_file) # sending hashed message to client
+
+        signature = pow(hashed_file, spriv[1], spriv[0]) # creating a signature for the hashed message
+        b_sign = signature.to_bytes(256, "big")
+        conn.send(b_sign) # sending signature of the hashed message to client
         
-        if not data_client:
-            # if data is not received break
+        print(f"\n {client_file} file content successfully hashed, signed and sent!\n")
+
+
+
+
+
+
+
+    # RECEIVING CLIENT FILES
+    client_hash_list = []
+    for ctr in range(1,3): 
+        b_clientfile = conn.recv(32)
+        clientfile_hash = int.from_bytes(b_clientfile, "big")
+        client_hash_list.append(clientfile_hash)
+
+        b_sign = conn.recv(256)
+        sign = int.from_bytes(b_sign, "big")
+        sign_hash = pow(sign, ckeye, ckeyn)
+        
+        if not sign_hash == clientfile_hash:
+            print("unable to verify.")
+            conn.close()
             break
-        
-        # client message template
-        print("\n List of client\'s hashed files: " + str(data_client))
-
-        # server list of hashes
-        hash_list = []
-
-        # client generating public key and private key
-        server_key = gen()
-
-        # server sending public key to client !!
-        conn.send(server_key.encode())
 
 
-        # loop for server to enter file names
-        for ctr in range(1,6):
-
-            # server inputs file name
-            server_file = input(f"\n Enter name of File {ctr} --> ")
-
-            # hashed output of file content added to list of hashes
-            hash_list.append(hashfile(server_file))
-
-            print(f"\n {server_file} file content successfully hashed!")
 
 
-        # send list of hashes to the client !!
-        conn.send(hash_list.encode())  
-        
-        # checking similarity
-        print("\n Running similarity check...")
-        check = sim_check(str(data_client), hash_list)
 
-        # print check
-        print("\n Client and Server have the same content on hashed files: " + check)
+
+    # SIMILARITY CHECK !!!
+    print("List of files recd from client:")
+    print(client_hash_list)
+    print("\nList of files sent to client:")
+    print(server_hash_list)
+    
+    # checking similarity
+    print("\nRunning similarity check...")
+    sim_check(server_hash_list, client_hash_list)
+
+    print("\n\n")
 
     # close the connection
     conn.close()  

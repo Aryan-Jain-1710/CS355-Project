@@ -32,7 +32,7 @@ def import_public_key(filename):
 
 
 def key_gen():
-    keypair = RSA.generate(2048)
+    keypair = RSA.generate(1024)
     public_key = keypair.publickey()
 
     export_private_key(keypair, 'private_key.pem')
@@ -41,7 +41,7 @@ def key_gen():
     priv_key = import_private_key('private_key.pem')
     pub_key = import_public_key('public_key.pem')
 
-    return [priv_key, publ_key]
+    return [priv_key, public_key]
 
 
 def key_gen2():

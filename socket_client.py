@@ -1,5 +1,6 @@
 import socket
 from main import hashfile, sim_check
+from rsa_gen import key_gen2
 
 
 def client_program():
@@ -8,7 +9,7 @@ def client_program():
     host = socket.gethostname()
 
     # socket server port number
-    port = 5000
+    port = 6000
 
     # instantiate a socket
     client_socket = socket.socket()  
@@ -19,54 +20,97 @@ def client_program():
 
 
 
-    # client generating public key and private key
-    client_key = gen()
-
-    # client sending public key to server
-    client_socket.send(client_key.encode())
 
 
+    # KEY EXCHANGE!!!!
+    keys = key_gen2()
+    cpriv = keys[0]
+    cpub = keys[1]
 
+    # receiving server n and e
+    print("\n\nReceiving server details....")
+    skeyn = client_socket.recv(1000)
+    skeyn = int.from_bytes(skeyn, "big")
+    skeye = client_socket.recv(50)
+    skeye = int.from_bytes(skeye, "big")
+    print("\nrecd server n:",skeyn, sep="\n")
+    print("\nrecd server e:",skeye, sep="\n")
 
-    # client list of hashes
-    hash_list = []
-
-    # loop for client to enter file names
-    for ctr in range(1,6):
-
-        # client inputs file name
-        client_file = input(f"\n Enter name of File {ctr} --> ")
-
-        # hashed output of file content added to list of hashes
-        hash_list.append(hashfile(client_file))
-
-        print(f"\n {client_file} file content successfully hashed!")
-
-
-    # sending the list of hashed files to server
-    client_socket.send(hash_list.encode())
-
-
-
-
-    # receiving hashed response from server
-    data_server = client_socket.recv(1024).decode()
-
-    # server message template
-    print('\n List of server\'s hashed files: ' + data_server)
+    # sending client n and e
+    print("\n\nSending client details....")
+    cn = cpub[0].to_bytes(1000, 'big')
+    ce = cpub[1].to_bytes(50, 'big')
+    print("\client pub e as int:")
+    print(cpub[1])
+    print("\client pub n as int:")
+    print(cpub[0])
+    client_socket.send(cn)
+    print("sent client n")
+    client_socket.send(ce)
+    print("sent client e")
 
 
 
 
+
+
+
+    # RECEIVING SERVER FILES !!!
+    server_hash_list =[]
+    for ctr in range(1,3): 
+        b_servfile = client_socket.recv(32)
+        servfile_hash = int.from_bytes(b_servfile, "big")
+        server_hash_list.append(servfile_hash)
+
+        b_sign = client_socket.recv(256)
+        sign = int.from_bytes(b_sign, "big")
+        sign_hash = pow(sign, skeye, skeyn)
+
+        if not sign_hash == servfile_hash:
+            print("unable to verify.")
+            client_socket.close()
+            break
+        # print(f"{servfile} received!\n\n")
+
+
+
+
+
+
+
+    # SENDING CLIENT FILES !!!
+    client_hash_list = []
+    for ctr in range(1,3): 
+        client_file = input(f"\n Enter name of File {ctr} --> ") # server inputs file names
+
+        b_hashed_file = hashfile(client_file) # hashing the content of the file inputted
+        hashed_file = int.from_bytes(b_hashed_file, "big")
+        client_hash_list.append(hashed_file)
+        client_socket.send(b_hashed_file) # sending hashed message to client
+        
+        signature = pow(hashed_file, cpriv[1], cpriv[0]) # creating a signature for the hashed message
+        b_sign = signature.to_bytes(256, "big")
+        client_socket.send(b_sign) # sending signature of the hashed message to client
+
+        print(f"\n {client_file} file content successfully hashed, signed and sent!\n")
+
+
+
+
+
+
+
+    # RUNNING SIMILARITY CHECK!!!!
+    print("List of files recd from server:")
+    print(server_hash_list)
+    print("\nList of files sent to server:")
+    print(client_hash_list)
+    
     # checking similarity
-    print("\n Running similarity check...")
-    check = sim_check(str(data_server), hash_list)
+    print("\nRunning similarity check...")
+    sim_check(server_hash_list, client_hash_list)
 
-    # print check
-    print("\n Client and Server have the same content on hashed files: " + check)
-
-
-
+    print("\n\n")
 
     # close the connection
     client_socket.close() 
