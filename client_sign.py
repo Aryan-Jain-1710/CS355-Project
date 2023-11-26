@@ -6,7 +6,7 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from hashlib import sha512
 from Crypto.PublicKey import RSA
-
+import time
 
 def client_program():
 
@@ -21,28 +21,31 @@ def client_program():
     client_public_key = client_key_list[1] # [n, e]
     
 
-    # print("Client public key:\n")
-    # print(hex(client_public_key[0]) + "\n" + hex(client_public_key[1]))
+    print("Client public key:\n")
+    print(hex(client_public_key[0]) + "\n" + hex(client_public_key[1]))
 
 
     # SENDING CLIENT PUBLIC KEY TO SERVER
-    client_socket.send(hex(client_public_key[0]).encode())  # sending client public key 'n' to server
-    client_socket.send(hex(client_public_key[1]).encode())  # sending client public key 'e' to server
+    client_socket.send(str(client_public_key[0]).encode())  # sending client public key 'n' to server
+    client_socket.send(str(client_public_key[1]).encode())  # sending client public key 'e' to server
 
-    print("keys sent")
+    print("\nPublic Keys sent to Server")
 
     # RECEIVING SERVER PUBLIC KEY
     server_public_key = []
+    print("before receiving n from server")
     server_public_key.append(client_socket.recv(3000).decode())    # server public key (n)
+    print("before receiving e from server")
     server_public_key.append(client_socket.recv(3000).decode())    # server public key (e)
+    print("after receiving both n and e from server")
     
     server_public_key[0] = int(server_public_key[0], 0)
     server_public_key[1] = int(server_public_key[1], 0)
 
-    print("keys received")
+    print("\nPublic Keys received from Server")
 
-    print(type(client_public_key[0]))
-    print(type(server_public_key[0]))
+    # print(type(client_public_key[0]))
+    # print(type(server_public_key[0]))
     
     # print(hex(server_public_key[0]) + "\n" + hex(server_public_key[1]))
 
@@ -50,17 +53,17 @@ def client_program():
     # SENDING HASHED MESSAGES AND SIGNATURES FROM CLIENT TO SERVER
     client_hash_list = [] 
     for ctr in range(1): 
-        client_file = input(f"\n Enter name of File {ctr} --> ") # server inputs file names
+        client_file = input(f"\nEnter name of File {ctr} --> ") # server inputs file names
         hashed_file = hashfile(client_file) # hashing the content of the file inputted
         client_hash_list.append(hashed_file)
         signature = pow(hashed_file, client_private_key[1], client_private_key[0]) # creating a signature for the hashed message
         
         client_socket.send(hex(hashed_file).encode()) # sending hashed message to client
-        print(hashed_file)
+        # print(hashed_file)
         
         client_socket.send(hex(signature).encode()) # sending signature of the hashed message to client
 
-        print(f"\n {client_file} file content successfully hashed, signed and sent!")
+        print(f"\n{client_file} file content successfully hashed, signed and sent!")
 
 
     # RECEIVING THE HASHED MESSAGES AND SIGNATURES FROM SERVER
@@ -81,7 +84,7 @@ def client_program():
     print(server_hash_list)
 
     # checking similarity
-    print("\n Running similarity check...")
+    print("\nRunning similarity check...")
     sim_check(server_hash_list, client_hash_list)
 
     # print check
