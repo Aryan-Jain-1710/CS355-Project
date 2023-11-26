@@ -1,13 +1,14 @@
 import socket
-from main import hashfile, sim_check
+from main import hashfile, sim_check, hash_file2, file_bytes
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
-from rsa_gen import key_gen
+from rsa_gen import key_gen, key_gen2
 
 
 
 def server_program():
+
 
     host = socket.gethostname()    # geting hostname
     port = 3000    # intiating a port number above 1024
@@ -18,75 +19,100 @@ def server_program():
     print("\nConnection from: " + str(address) + "\n") # when message received from client
 
 
+    server_key_list = key_gen2() # generating rsa key-pair for server
+    server_private_key = server_key_list[0] # [n, d]
+    server_public_key = server_key_list[1] # [n, e]
+
+
+    # SENDING SERVER PUBLIC KEY TO CLIENT
+    conn.send(hex(server_public_key[0]).encode())    # sending server public key 'n' to client
+    conn.send(hex(server_public_key[1]).encode())    # sending server public key 'e' to client
+
+
+    # RECEIVING CLIENT PUBLIC KEY
+    client_public_key = []
+    client_public_key.append(conn.recv(3000).decode())    # client public key (n)
+    client_public_key.append(conn.recv(3000).decode())    # client public key (e)
+
+
+    # SENDING HASHED MESSAGES AND SIGNATURES FROM SERVER TO CLIENT
+    server_hash_list = []
+    for ctr in range(1,6):
+
+        server_file = input(f"\n Enter name of File {ctr} --> ") # server inputs file names
+        server_hashed_msg = hashfile(server_file) # hashing the content of the file inputted
+        print("hashed output of the file content: " + server_hashed_msg) # showing server their hashed output of the file content
+        server_hash_list.append(server_hashed_msg) # adding hashed message to server's list of hashes
+        signature = pow(server_hashed_msg, server_private_key[1], server_private_key[0]) # creating a signature for the hashed message
+        conn.send(hex(server_hashed_msg).encode()) # sending hashed message to client
+        conn.send(hex(signature).encode()) # sending signature of the hashed message to client
+
+        print(f"\n {server_file} file content successfully hashed, signed and sent!")
 
 
 
+    # RECEIVING THE HASHED MESSAGES AND SIGNATURES FROM CLIENT
+    client_hash_list = []
+    for ctr in range(1,6):
+        client_hashed_msg = conn.recv(3000).decode()    # hashed message from client
+        client_hash_list.append(int(client_hashed_msg, 0))    # adding client's hashed message to the client's list of hashes
+        client_sign = conn.recv(3000).decode()    # signature of the hashed message from client
+        hashFromSignature = pow(int(client_sign, 0), int(client_public_key[1], 0), int(client_public_key[0], 0))   # computing hash from signature
+
+        if (int(client_hashed_msg, 0) != hashFromSignature): 
+            print("message from client could not be verified")
+            print("closing connection.....")
+            conn.close()      # close the connection
+            break
+            
 
 
-    # loop for communication
-    # while True:
+    # checking similarity
+    print("\n Running similarity check...")
+    check = sim_check(server_hash_list, client_hash_list)
 
-        # # receive data stream. it won't accept data packet greater than 1024 bytes
-        # data_client = conn.recv(2048).decode()
-        
-        # if not data_client:
-        #     # if data is not received break
-        #     break
-
-        # print("\n server priv key: " + str(server_keys[0]))
-
-        # # client generating public key and private key
-        # # server_key = gen()
-
-        # # server sending public key to client !!
-        # # conn.send(server_key.encode())
-
-        # # message = server_keys[1]
-        # # send list of hashes to the client !!
-        # conn.send(server_keys[1].exportKey(format='PEM', passphrase=None, pkcs=1))
-
-        # # conn.send(message.encode())  
-        
+    # print check
+    print("\n Client and Server have the same content on hashed files: " + check)
 
 
 
+    # message = b'shreyaaaaa is the best'
+    # hashed_msg = int.from_bytes(sha512(message).digest(), byteorder='big')
+
+    # hashFromSignature = pow(signature, client_public_key[1], client_public_key[0])
+    # print("Signature valid:", hashed_msg == hashFromSignature)
+    # print("\nHash From Signature:\n")
+    # print(hashFromSignature)
+
+    # client_socket.send(hex(hashed_msg).encode())
+    # client_socket.send(hex(signature).encode())
 
 
-    server_keys = key_gen() # rsa key pair for server
-    print("\n server priv key: " + str(server_keys[0]))
-    print("\n server public key: " + str(server_keys[1]))
-
-    conn.send(server_keys[1].exportKey(format='PEM', passphrase=None, pkcs=1))    # send server public key to client
-
-    client_pubkey = conn.recv(2048)
-    # client_pubkey = RSA.importKey(conn.recv(5000), passphrase=None)  # receive data stream. max data packet 5000 bytes        
-    print("\n client public key: " + str(client_pubkey))
-
-    client_key = RSA.import_key(client_pubkey)
-    print("\n client public key: " + str(client_key))
-
-    client_message = conn.recv(2048).decode()    # recieve the hash message from the client
-    print("\n\n\n hash message: " + str(client_message))
-
-    client_sign = conn.recv(2048).decode()    # receive the signature from the client
-    print("\n\n\n signature: " + str(client_sign))
+ 
+    # client_hash_list = []
+    # client_hashed_msg = conn.recv(3000).decode()    # hashed message from client
 
 
-    try:
-        pkcs1_15.new(client_key).verify(client_message, client_sign)
-        print("The signature is valid.")
-    except (TypeError):
-        print("The signature is not valid.")
-    except (ValueError):
-        print("The signature is nottttt valid.")
+    # # print("\nhashed message:\n ")
+    # # print(int(hashed_msg, 0))
+    # # print("\n\n\n")
 
+    # sign = conn.recv(3000).decode()    # signature
+    # # print("\nsignature: \n")
+    # # print(int(sign, 0))
+    # # print("\n\n\n")
 
-
-
+    # # signature check
+    # hashFromSignature = pow(int(sign, 0), int(client_key[1], 0), int(client_key[0], 0))
+    # # print("hash from signature: \n")
+    # # print(hashFromSignature)
+    # # print("\nSignature valid:", int(hashed_msg, 0) == hashFromSignature)
 
 
 
     conn.close()      # close the connection
+
+
 
 if __name__ == '__main__':
     server_program()

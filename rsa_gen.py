@@ -45,4 +45,9 @@ def key_gen():
 
 
 def key_gen2():
+    pair = RSA.generate(2048)
     
+    priv = [pair.n, pair.d]
+    pub = [pair.n, pair.e]
+    
+    return [priv, pub]

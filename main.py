@@ -1,5 +1,7 @@
 import sys
 import hashlib
+# from hashlib import sha256
+
 
 def hashfile(file):
 
@@ -21,10 +23,18 @@ def hashfile(file):
 
 	# hexdigest() gives a hexadecimal representation of the hashed value of 
     	# all the data passed to the sha256 function with update()
-	return sha256.hexdigest()
+	# return sha256.hexdigest()
+	return int.from_bytes(sha256().digest(), byteorder='big')
+
 
 # f1_hash = hashfile(sys.argv[1])
 # print(f"Hash: {f1_hash}")
+
+
+# def hash_file2(message):
+# 	message = bytes(message, 'utf-8')
+# 	return int.from_bytes(sha512(message).digest(), byteorder='big')
+
 
 
 
