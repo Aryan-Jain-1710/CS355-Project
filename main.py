@@ -24,7 +24,7 @@ def hashfile(file):
 	# hexdigest() gives a hexadecimal representation of the hashed value of 
     	# all the data passed to the sha256 function with update()
 	# return sha256.hexdigest()
-	return int.from_bytes(sha256().digest(), byteorder='big')
+	return int.from_bytes(sha256.digest(), byteorder='big')
 
 
 # f1_hash = hashfile(sys.argv[1])
@@ -40,16 +40,17 @@ def hashfile(file):
 
 def sim_check(x, y):
 
-	if len(x) != 5:
-		return "invalid"
-	elif len(y) != 5:
-		return "invalid"
+	if len(x) != 1:
+		print("invalid")
+	elif len(y) != 1:
+		print("invalid")
 	
 	match = []
 
 	for i in x:
 		for j in y:
 			if i == j:
-				match.append[i]
+				match.append(i)
 
-	return len(match) + " matches: " + match
+	print(str(len(match)) + "matches")
+	print(match)

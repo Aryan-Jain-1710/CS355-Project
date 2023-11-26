@@ -11,7 +11,7 @@ from Crypto.PublicKey import RSA
 def client_program():
 
     host = socket.gethostname() # since both codes are running on the same system
-    port = 3000 # socket server port number
+    port = 5000 # socket server port number
     client_socket = socket.socket()  # instantiate a socket
     client_socket.connect((host, port)) # connecting to server
 
@@ -20,6 +20,7 @@ def client_program():
     client_private_key = client_key_list[0] # [n, d]
     client_public_key = client_key_list[1] # [n, e]
     
+
     # print("Client public key:\n")
     # print(hex(client_public_key[0]) + "\n" + hex(client_public_key[1]))
 
@@ -28,21 +29,35 @@ def client_program():
     client_socket.send(hex(client_public_key[0]).encode())  # sending client public key 'n' to server
     client_socket.send(hex(client_public_key[1]).encode())  # sending client public key 'e' to server
 
+    print("keys sent")
 
     # RECEIVING SERVER PUBLIC KEY
     server_public_key = []
     server_public_key.append(client_socket.recv(3000).decode())    # server public key (n)
     server_public_key.append(client_socket.recv(3000).decode())    # server public key (e)
     
+    server_public_key[0] = int(server_public_key[0], 0)
+    server_public_key[1] = int(server_public_key[1], 0)
+
+    print("keys received")
+
+    print(type(client_public_key[0]))
+    print(type(server_public_key[0]))
+    
+    # print(hex(server_public_key[0]) + "\n" + hex(server_public_key[1]))
+
 
     # SENDING HASHED MESSAGES AND SIGNATURES FROM CLIENT TO SERVER
     client_hash_list = [] 
-    for ctr in range(1,6): 
+    for ctr in range(1): 
         client_file = input(f"\n Enter name of File {ctr} --> ") # server inputs file names
         hashed_file = hashfile(client_file) # hashing the content of the file inputted
         client_hash_list.append(hashed_file)
         signature = pow(hashed_file, client_private_key[1], client_private_key[0]) # creating a signature for the hashed message
+        
         client_socket.send(hex(hashed_file).encode()) # sending hashed message to client
+        print(hashed_file)
+        
         client_socket.send(hex(signature).encode()) # sending signature of the hashed message to client
 
         print(f"\n {client_file} file content successfully hashed, signed and sent!")
@@ -50,23 +65,27 @@ def client_program():
 
     # RECEIVING THE HASHED MESSAGES AND SIGNATURES FROM SERVER
     server_hash_list = []
-    for i in range(5):
+    for i in range(1):
         server_hash = client_socket.recv(3000).decode()
         server_hash_list.append(int(server_hash, 0))
         server_sign = client_socket.recv(3000).decode()
-        sign_hash = pow(int(server_sign, 0), int(server_public_key[1], 0), int(server_public_key[0], 0))
+        sign_hash = pow(int(server_sign, 0), server_public_key[1], server_public_key[0])
         if not (int(server_hash, 0) == sign_hash):
             print("message from server could not be verified")
             print("closing connection.....")
             client_socket.close()      # close the connection
             break
 
+
+    print(client_hash_list)
+    print(server_hash_list)
+
     # checking similarity
     print("\n Running similarity check...")
-    check = sim_check(server_hash_list, client_hash_list)
+    sim_check(server_hash_list, client_hash_list)
 
     # print check
-    print("\n Client and Server have the same content on hashed files: " + check)
+    # print("\n Client and Server have the same content on hashed files: " + check)
     
     
     # hashed_msg = int.from_bytes(sha512(message).digest(), byteorder='big')
