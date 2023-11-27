@@ -35,7 +35,7 @@ This project was completed in _Python_, and we made use of the `PyCryptodome` li
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/secure-file-exchange.git
+    git clone https://github.com/Aryan-Jain-1710/CS355-Project.git
     cd CS355-Project
     ```
 
