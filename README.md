@@ -1,10 +1,11 @@
 # CS355 Project
 
-In this project, we implemented a communication channel and protocol that enables two participants, Alice and Bob, to check if they have any files in common without revealing the contents of the file to one another.
+In this project, we implemented a communication channel and protocol that enables two participants, Alice and Bob, to check if they have any files in common without revealing the contents of the files to one another.
 
+<br/>
 
 # Protocol Specification
-The objective of the protocol is to identify common files between Alice and Bob without revealing the actual file contents of one to the other.
+The protocol's objective is to identify common files between Alice and Bob without revealing the actual file contents of one to the other.
 - Alice and Bob are subcontractors (security auditors) of the same company, so they only have access to the code segments they receive from the company.
 - Each of them is given ***5*** code-segments in the form of files, each of size ~500MB.
 - Both Alice and Bob operate with incredible hostility, so they will exploit any local data they receive through the client-socket channel. They are also unwilling to share the actual contents of their files.
@@ -16,17 +17,17 @@ The objective of the protocol is to identify common files between Alice and Bob 
 # Implementation
 
 
-### Project Structure
+### Project Structure:
 
 - **socket_server.py**: The server side of the application, representing Bob.
 - **socket_client.py**: The client side of the application, representing Alice.
-- **main.py**: Contains helper functions for hashing contents of input files with SHA-256, and ***sim_check*** for finding overlaps between Alice and Bob's files. 
+- **main.py**: Contains helper functions for hashing contents of input files with SHA-256, and `sim_check2()` for finding overlaps between Alice and Bob's files. 
 - **rsa_gen.py**: Contains helper function for RSA key generation
 ---
 
-### Procedure
+### Procedure:
 
-1. **Key Generation:** Each participant generates their own private and public RSA keys using the `rsa.generate` function from the `PyCryptodome` library.
+1. **Key Generation:** Each participant generates their own private and public RSA keys using the `rsa.generate()` function from the `PyCryptodome` library.
 
 2. **Key Exchange:** Participants exchange their public RSA keys through the established socket connection.
 
@@ -34,7 +35,7 @@ The objective of the protocol is to identify common files between Alice and Bob 
 
 4. **Signature Verification:** Upon receiving messages, participants verify the RSA signatures to authenticate the source of each file. If a signature is not verified correctly, all computations are ceased and the connection is closed.
 
-5. **Similarity Check:** After successfully exchanging files, a similarity check is performed using the `sim_check` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
+5. **Similarity Check:** After successfully exchanging files, a similarity check is performed using the `sim_check2()` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
 
 ---
 ### Dependencies
@@ -85,7 +86,7 @@ The objective of the protocol is to identify common files between Alice and Bob 
 
 ### 1. Confidentiality: Compare files without revealing file contents 
 - **Objective:** Enable Alice and Bob to identify common files without disclosing the actual contents of their files to one another.
-- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the clinet-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
+- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the client-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
 
 ---
 ### 2. _TO-DO!!!_ Secure Public Key Exchange
@@ -100,7 +101,7 @@ The objective of the protocol is to identify common files between Alice and Bob 
 ---
 ### 4. Limited Knowledge: Learn only about similarity results in the context of files Alice/Bob themselves possess
 - **Objective:** Restrict the information revealed through similarity results specific to the files possessed by Alice and Bob.
-- **Achieved By:** The `sim_check` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files (including not even revealing their file name).
+- **Achieved By:** The `sim_check` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files (including not even revealing the other party's file name).
 
 ---
 These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
