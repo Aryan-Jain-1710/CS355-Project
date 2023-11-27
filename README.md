@@ -89,7 +89,7 @@ The protocol's objective is to identify common files between Alice and Bob witho
 - **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the client-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
 
 ---
-### 2. _TO-DO!!!_ Secure Public Key Exchange
+### 2. Secure Public Key Exchange
 - **Objective:** Ensure the secure exchange of public keys, preventing man-in-the-middle attacks.
 - **Achieved By:** Alice and Bob exchange public keys securely through the client-server socket connection. They also send the public keys they receive back for verification from the sender. The connection is terminated if the public key received back doesn't match the public key in their possession that they sent.
 
