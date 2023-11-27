@@ -8,7 +8,7 @@ In this project, we implemented a communication channel and protocol that enable
 
 
 
-### Goal Acheieved
+### Goal Achieved
 
 
 
