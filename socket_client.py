@@ -6,7 +6,7 @@ from rsa_gen import key_gen2
 def client_program():
 
     host = socket.gethostname() # since both codes are running on the same system
-    port = 5000 # socket server port number
+    port = 6000 # socket server port number
     client_socket = socket.socket()  # instantiate a socket
     client_socket.connect((host, port)) # connecting to server
 

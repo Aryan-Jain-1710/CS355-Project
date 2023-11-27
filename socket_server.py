@@ -6,7 +6,7 @@ from rsa_gen import key_gen2
 def server_program():
  
     host = socket.gethostname()    # geting hostname
-    port = 5000    # intiating a port number above 1024
+    port = 6000    # intiating a port number above 1024
     server_socket = socket.socket()    # getting instance of socket
     server_socket.bind((host, port))    # binding host address and port together
     server_socket.listen(1)    # configure how many client the server can listen simultaneously
