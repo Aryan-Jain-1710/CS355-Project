@@ -104,6 +104,6 @@ The protocol's objective is to identify common files between Alice and Bob witho
 - **Achieved By:** The `sim_check2()` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files (including not even revealing the other party's file name).
 
 ---
-These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
+### `Note:` These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
 
 <br/>
