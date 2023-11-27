@@ -16,8 +16,6 @@ def server_program():
 
 
 
-
-
     # generating server keys
     server_key_list = key_gen2() # generating rsa key-pair for server
     server_private_key = server_key_list[0] # [n, d]
@@ -52,8 +50,26 @@ def server_program():
 
 
 
+    # VERIFYING SERVER PUBLIC KEY FROM CLIENT
+    print("\nReceiving public key for verification...")
+
+    verify_server_key_n = conn.recv(1000)
+    verify_server_key_n = int.from_bytes(verify_server_key_n, "big") # converting key from bytes to int
+    verify_server_key_e = conn.recv(50)
+    verify_server_key_e = int.from_bytes(verify_server_key_e, "big") # converting key from bytes to int
+
+    if verify_server_key_n != server_public_key[0] or verify_server_key_e != server_public_key[1]: # if key received doesn't match key generated
+        print("\nKey Verification Failed!")
+        print("Closing connection....")
+        conn.close()
+
+
+
+
+
+
     # RECEIVING CLIENT PUBLIC KEY (n and e)
-    print("\nReceiving Client public key...\n")
+    print("\nReceiving Client public key...")
 
     client_public_key_n = conn.recv(1000)    # receiving client public key (n)
     client_public_key_n = int.from_bytes(client_public_key_n, "big")    # converting (n) from bytes to int
@@ -69,11 +85,21 @@ def server_program():
 
 
 
+    # SENDING CLIENT PUBLIC KEY BACK FOR VERIFICATION
+    print("\nVerifying client public key...\n")
+    conn.send(client_public_key_n.to_bytes(1000, 'big')) 
+    conn.send(client_public_key_e.to_bytes(50, 'big')) 
+
+
+
+
+
+
     # SENDING SERVER FILES !!!
     server_str_list = []
     server_hash_list = []
     
-    for ctr in range(1, 3): 
+    for ctr in range(1, 6): 
         print("-----------------------------------------------------------------")
 
         server_file = input(f"\nEnter name of File {ctr} --> ") # server inputs file names
@@ -100,7 +126,7 @@ def server_program():
     # RECEIVING CLIENT FILES !!!
     print("-----------------------------------------------------------------")
     client_hash_list = []
-    for ctr in range(1,3): 
+    for ctr in range(1,6): 
         b_clientfile = conn.recv(32) # hashed message as bytes from client
         clientfile_hash = int.from_bytes(b_clientfile, "big")  # converting hashed message from bytes to int
         client_hash_list.append(clientfile_hash)  # adding client's hashed message to the client's list of hashes

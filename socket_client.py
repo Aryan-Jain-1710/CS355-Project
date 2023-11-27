@@ -46,8 +46,19 @@ def client_program():
 
 
 
+    # SENDING SERVER PUBLIC KEY BACK FOR VERIFICATION
+    print("\nVerifying server public key...")
+    client_socket.send(server_public_key_n.to_bytes(1000, 'big'))
+    client_socket.send(server_public_key_e.to_bytes(50, 'big'))
+
+
+
+
+
+
+
     # SENDING CLIENT PUBLIC KEY (n and e)
-    print("\nSending Client public key to Server...\n")
+    print("\nSending Client public key to Server...")
 
     # print("\nclient pub e as int:")
     # print(cpub[1])
@@ -65,10 +76,27 @@ def client_program():
 
 
 
+    # VERIFYING CLIENT PUBLIC KEY FROM SERVER
+    print("\nReceiving public key for verification...\n")
+
+    verify_client_key_n = client_socket.recv(1000)
+    verify_client_key_n = int.from_bytes(verify_client_key_n, "big") # converting key from bytes to int
+    verify_client_key_e = client_socket.recv(50)
+    verify_client_key_e = int.from_bytes(verify_client_key_e, "big") # converting key from bytes to int
+
+    if verify_client_key_n != client_public_key[0] or verify_client_key_e != client_public_key[1]: # if key received doesn't match key generated
+        print("\nKey Verification Failed!")
+        print("Closing connection....")
+        client_socket.close()
+
+
+
+
+
 
     # RECEIVING SERVER FILES !!!
     server_hash_list = []
-    for ctr in range(1,3): 
+    for ctr in range(1,6): 
         b_servfile = client_socket.recv(32) # hashed message as bytes from server
         serverfile_hash = int.from_bytes(b_servfile, "big")  # converting hashed message from bytes to int
         server_hash_list.append(serverfile_hash)  # adding server's hashed message to the server's list of hashes
@@ -93,7 +121,7 @@ def client_program():
     # SENDING CLIENT FILES !!!
     client_hash_list = []
     client_str_list = []
-    for ctr in range(1,3): 
+    for ctr in range(1,6): 
         print("-----------------------------------------------------------------")
 
         client_file = input(f"\nEnter name of File {ctr} --> ") # server inputs file names
