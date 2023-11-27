@@ -3,7 +3,7 @@
 In this project, we implemented a communication channel and protocol that enables two participants, Alice and Bob, to check if they have any files in common without revealing the contents of the file to one another.
 
 
-## Protocol Specification
+# Protocol Specification
 The objective of the protocol is to identify common files between Alice and Bob without revealing the actual file contents of one to the other.
 - Alice and Bob are subcontractors (security auditors) of the same company, so they only have access to the code segments they receive from the company.
 - Each of them is given ***5*** code-segments in the form of files, each of size ~500MB.
@@ -11,11 +11,9 @@ The objective of the protocol is to identify common files between Alice and Bob 
 - Adversaries attempting to attack the communication channel are anticipated.
 
 
-
-<br/>
 <br/>
 
-## Implementation
+# Implementation
 
 
 ### Project Structure
@@ -24,10 +22,9 @@ The objective of the protocol is to identify common files between Alice and Bob 
 - **socket_client.py**: The client side of the application, representing Alice.
 - **main.py**: Contains helper functions for hashing contents of input files with SHA-256, and ***sim_check*** for finding overlaps between Alice and Bob's files. 
 - **rsa_gen.py**: Contains helper function for RSA key generation
+---
 
-<br/>
-
-### Implementation Details
+### Procedure
 
 1. **Key Generation:** Each participant generates their own private and public RSA keys using the `rsa.generate` function from the `PyCryptodome` library.
 
@@ -39,15 +36,13 @@ The objective of the protocol is to identify common files between Alice and Bob 
 
 5. **Similarity Check:** After successfully exchanging files, a similarity check is performed using the `sim_check` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
 
-<br/>
-
+---
 ### Dependencies
 - **socket**: For client-server communication.
 - **PyCryptodome**: For RSA key generation.
 - **hashlib**: For SHA-256 hashing.
 
-<br/>
-
+---
 ### Setup
 
 1. Clone the repository:
@@ -63,8 +58,7 @@ The objective of the protocol is to identify common files between Alice and Bob 
     pip install pycryptodome
     ```
 
-<br/>
-
+---
 ### How to Run
 
 1. Run the server:
@@ -85,11 +79,9 @@ The objective of the protocol is to identify common files between Alice and Bob 
 
 
 
-
-<br/>
 <br/>
 
-## Security Analysis
+# Security Analysis
 
 <br/>
 
