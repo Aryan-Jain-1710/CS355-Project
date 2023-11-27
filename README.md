@@ -6,8 +6,8 @@ In this project, we implemented a communication channel and protocol that enable
 ## Protocol Specification
 The objective of the protocol is to identify common files between Alice and Bob without revealing the actual file contents of one to the other.
 - Alice and Bob are subcontractors (security auditors) of the same company, so they only have access to the code segments they receive from the company.
-- Each of them is given ***5*** code-segments in the form of files of size ~500MB.
-- Both Alice and Bob operate with incredible hostility, so they are unwilling to share the actual contents of their files, and exploit any local data they receive through the client-socket channel.
+- Each of them is given ***5*** code-segments in the form of files, each of size ~500MB.
+- Both Alice and Bob operate with incredible hostility, so they will exploit any local data they receive through the client-socket channel. They are also unwilling to share the actual contents of their files.
 - Adversaries attempting to attack the communication channel are anticipated.
 
 
