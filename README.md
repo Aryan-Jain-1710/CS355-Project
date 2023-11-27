@@ -2,15 +2,15 @@
 
 In this project, we implemented a communication channel and protocol that enables two participants, Alice and Bob, to check if they have any files in common without revealing the contents of the file to one another.
 
-### Security Goal
+
+## Protocol Specification
 
 
 
+<br/>
+<br/>
 
-
-### Goal Achieved
-
-
+## Implementation
 
 
 ### Project Structure
@@ -19,6 +19,8 @@ In this project, we implemented a communication channel and protocol that enable
 - **socket_client.py**: The client side of the application, representing Alice.
 - **main.py**: Contains helper functions for hashing contents of input files with SHA-256, and ***sim_check*** for finding overlaps between Alice and Bob's files. 
 - **rsa_gen.py**: Contains helper function for RSA key generation
+
+<br/>
 
 ### Implementation Details
 
@@ -32,11 +34,14 @@ In this project, we implemented a communication channel and protocol that enable
 
 5. **Similarity Check:** After successfully exchanging files, a similarity check is performed using the `sim_check` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
 
+<br/>
+
 ### Dependencies
 - **socket**: For client-server communication.
 - **PyCryptodome**: For RSA key generation.
 - **hashlib**: For SHA-256 hashing.
 
+<br/>
 
 ### Setup
 
@@ -52,6 +57,8 @@ In this project, we implemented a communication channel and protocol that enable
     ```bash
     pip install pycryptodome
     ```
+
+<br/>
 
 ### How to Run
 
@@ -71,3 +78,19 @@ In this project, we implemented a communication channel and protocol that enable
 
 4. The files will be securely exchanged between the participants, and the results of the file similarity check will be displayed for each participant.
 
+
+
+
+<br/>
+<br/>
+
+## Security Analysis
+
+<br/>
+
+### Security Goal
+
+
+<br/>
+
+### Goal Achieved
