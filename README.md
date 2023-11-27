@@ -85,10 +85,10 @@ The objective of the protocol is to identify common files between Alice and Bob 
 
 ### 1. Confidentiality: Compare files without revealing file contents 
 - **Objective:** Enable Alice and Bob to identify common files without disclosing the actual contents of their files to one another.
-- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the clinet-server channel.
+- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the clinet-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
 
 ---
-### 2. Secure Public Key Exchange
+### 2. _TO-DO!!!_ Secure Public Key Exchange
 - **Objective:** Ensure the secure exchange of public keys, preventing man-in-the-middle attacks.
 - **Achieved By:** Alice and Bob exchange public keys securely through the client-server socket connection. They also send the public keys they receive back for verification from the sender. The connection is terminated if the public key received back doesn't match the public key in their possession that they sent.
 
@@ -100,10 +100,9 @@ The objective of the protocol is to identify common files between Alice and Bob 
 ---
 ### 4. Limited Knowledge: Learn only about similarity results in the context of files Alice/Bob themselves possess
 - **Objective:** Restrict the information revealed through similarity results specific to the files possessed by Alice and Bob.
-- **Achieved By:** The `sim_check` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files.
+- **Achieved By:** The `sim_check` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files (including not even revealing their file name).
 
 ---
-**Note:** These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
-
+These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
 
 <br/>
