@@ -30,15 +30,20 @@ The protocol's objective is to identify common files between Alice and Bob witho
 
 ### Procedure:
 
-1. **Key Generation:** Each participant generates their own private and public RSA keys using the `rsa.generate()` function from the `PyCryptodome` library.
+1. **Key Generation:**  
+   Each participant generates their own private and public RSA keys using the `rsa.generate()` function from the `PyCryptodome` library. This is done by generating a number *N*, the product of 2 random equal-length prime numbers _p_ and _q_, and computing _e_, _d_ such that $e \cdot d = 1 \text{ mod } \upphi(N)$. The private key is _d_, and the public key is _(N, e)_.
 
-2. **Key Exchange and Verification:** Participants exchange their public RSA keys through the established socket connection. They also send the received public keys back to each other for verification. The connection is terminated if public key verification fails, i.e. if the public key sent back doesn't match the public key in their possession that they sent out.
+2. **Key Exchange and Verification:**  
+   Participants exchange their public RSA keys through the established socket connection. They also send the received public keys back to each other for verification. The connection is terminated if public key verification fails, i.e. if the public key sent back doesn't match the public key in their possession that they sent out.
 
-3. **File Exchange:** For each file, participants send two messages: the hashed value of the file contents using SHA256 and the RSA signature computed for the hashed file using their private RSA key.
+3. **File Exchange:**  
+   For each file, participants send two messages: the hashed value of the file contents and the RSA signature computed for the hashed file. The contents of the file are hashed using the SHA-256 algorithm, yielding a 256-bit digest of the file's contents without revealing any information about the file itself. The signature is then computed following the hash-and-sign paradigm, where each participant signs the hashed output of their file with their private key _d_ and sends it to the other participant through the socket connection. 
 
-4. **Signature Verification:** Upon receiving messages, participants verify the RSA signatures to authenticate the source of each file. If a signature is not verified correctly, all computations are ceased and the connection is closed.
+4. **Signature Verification:**  
+   Upon receiving messages, participants verify the RSA signatures on the hashed value of the file received with the public key in their possession from Step 2 to authenticate the source of the message. If a signature is not verified correctly, all computations are ceased and the connection is closed.
 
-5. **Similarity Check:** After successfully exchanging files, a similarity check is performed using the `sim_check2()` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
+5. **Similarity Check:**  
+   After successfully exchanging files, a similarity check is performed using the `sim_check2()` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
 
 ---
 ### Dependencies
