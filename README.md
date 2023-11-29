@@ -117,4 +117,5 @@ The protocol's objective is to identify common files between Alice and Bob witho
 ---
 ### `Note:` These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
 
+---
 <br/>
