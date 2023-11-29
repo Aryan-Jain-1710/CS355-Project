@@ -109,24 +109,24 @@ $$\text{Vrfy}_{pk}(m, \sigma): \text{ output 1  iff  } \sigma^e = H(m) \text{ mo
 
 # Security Analysis (Security Goals and How They Are Achieved)
 
-### 1. Confidentiality: Compare files without revealing file contents 
-- **Objective:** Enable Alice and Bob to identify common files without disclosing the actual contents of their files to one another.
-- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the client-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
-
----
-### 2. Secure Public Key Exchange
+### 1. Secure Public Key Exchange
 - **Objective:** Ensure the secure exchange of public keys, preventing man-in-the-middle attacks.
 - **Achieved By:** Alice and Bob exchange public keys securely through the client-server socket connection. They also send the public keys they receive back for verification from the sender. The connection is terminated if the public key received back doesn't match the public key in their possession that they sent.
 
 ---
+### 2. Confidentiality: Compare files without revealing file contents 
+- **Objective:** Enable Alice and Bob to identify common files without disclosing the actual contents of their files to one another.
+- **Achieved By:** The contents of files are hashed using SHA256, an irreversible, one-way hashing algorithm, before being sent through the client-server channel. Moreover, Alice and Bob only have access to the files they are given as subcontractors of the company, so they don't have access to any other files, which prevents them from brute-forcing the hashing algorithm on the company's codebase.
+
+---
 ### 3. Authentication: Ensure hashed file content is exchanged between Alice and Bob only
 - **Objective:** Authenticate files to prevent unauthorized access and ensure data integrity.
-- **Achieved By:** Files are authenticated using RSA signatures. Any anomaly in communication or failure in signature verification results in the termination of the connection.
+- **Achieved By:** Files are authenticated using RSA signatures. A participant signs the hashed contents of their file with their private key and the other participant attempts to verify this signature with the public key that they receive. Any anomaly in communication or failure in signature verification results in the termination of the connection.
 
 ---
 ### 4. Limited Knowledge: Learn only about similarity results in the context of files Alice/Bob themselves possess
 - **Objective:** Restrict the information revealed through similarity results specific to the files possessed by Alice and Bob.
-- **Achieved By:** The `sim_check2()` function is used to display results tailored to the names of files owned by each participant that they have in common with the other, preventing the disclosure of any information about the other participant's files (including not even revealing the other party's file name).
+- **Achieved By:** Each participant has a list of the hashes of the contents of the files they are given by the company. They also receive the hashed values of the contents of the other participant's files. Then, the `sim_check2()` function finds matches in these lists of hashed values and is used to display results tailored to each participant by only displaying the names of files owned by them that they have in common with the other participant. This prevents the disclosure of any information about the other participant's files (including not even revealing the other party's file name).
 
 ---
 ### `Note:` These security measures collectively provide a robust framework for secure file exchange and communication between Alice and Bob.
