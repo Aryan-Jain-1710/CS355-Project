@@ -42,6 +42,15 @@ The protocol's objective is to identify common files between Alice and Bob witho
 4. **Signature Verification:**  
    Upon receiving messages, participants verify the RSA signatures on the hashed value of the file received with the public key in their possession from Step 2 to authenticate the source of the message. If a signature is not verified correctly, all computations are ceased and the connection is closed.
 
+$$\text{Public Key}: (N, e)$$
+
+$$\text{Private Key}: d$$
+
+$$\text{Sign}_{sk} (m) = H(m)^d  \text{ mod } N$$
+
+$$\text{Vrfy}_{pk}(m, \sigma): \text{ output 1  iff  } \sigma^e = H(m) \text{ mod } N$$
+
+
 5. **Similarity Check:**  
    After successfully exchanging files, a similarity check is performed using the `sim_check2()` function, and each participant is shown how many and the contents of which of their files are in common with the other participant.
 
