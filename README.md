@@ -78,6 +78,11 @@ The protocol's objective is to identify common files between Alice and Bob witho
 
 4. The files will be securely exchanged between the participants, and the results of the file similarity check will be displayed for each participant.
 
+---
+### References
+
+-  
+-  
 
 
 <br/>
