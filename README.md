@@ -2,6 +2,8 @@
 
 In this project, we implemented a communication channel and protocol that enables two participants, Alice and Bob, to check if they have any files in common without revealing the contents of the files to one another.
 
+---
+
 <br/>
 
 # Protocol Specification
