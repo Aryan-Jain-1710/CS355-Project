@@ -81,8 +81,10 @@ The protocol's objective is to identify common files between Alice and Bob witho
 ---
 ### References
 
--  
--  
+-  https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples
+   - for RSA Digital Signature Implementation  
+-  https://realpython.com/python-sockets/
+   -  for socket programming in python
 
 
 <br/>
