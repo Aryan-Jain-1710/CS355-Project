@@ -3,6 +3,17 @@ from main import hashfile, sim_check2
 from rsa_gen import key_gen2
 
 
+
+"""
+    Description: Implementation of the server-side communication, 
+                 involving key exchange and verification, file hashing 
+                 and verification by digital signature, and 
+                 computation of similarity check results for the client.
+    Parameters: None
+    Returns: None
+    References: https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples # for RSA Digital Signature Implementation
+                https://realpython.com/python-sockets/ # for socket programming in python
+"""
 def server_program():
  
     host = socket.gethostname()    # geting hostname

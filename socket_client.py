@@ -3,7 +3,19 @@ from main import hashfile, sim_check2
 from rsa_gen import key_gen2
 
 
+
+"""
+    Description: Implementation of the client-side communication, 
+                 involving key exchange and verification, file hashing 
+                 and verification by digital signature, and 
+                 computation of similarity check results for the client.
+    Parameters: None
+    Returns: None
+    References: https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples # for RSA Digital Signature Implementation
+                https://realpython.com/python-sockets/ # for socket programming in python
+"""
 def client_program():
+
 
     host = socket.gethostname() # since both codes are running on the same system
     port = 6000 # socket server port number
@@ -47,7 +59,6 @@ def client_program():
     print("\nVerifying server public key...")
     client_socket.send(server_public_key_n.to_bytes(1000, 'big'))
     client_socket.send(server_public_key_e.to_bytes(50, 'big'))
-
 
 
 

@@ -15,10 +15,18 @@ from Crypto.PublicKey import RSA
 #     return [priv_key, public_key]
 
 
+
+"""
+    Description: Generate public and private RSA keys
+    Parameters: None
+    Returns: List of private and public RSA keys
+    Reference: https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples
+"""
 def key_gen2():
-    pair = RSA.generate(2048)
+
+    pair = RSA.generate(2048) # generating rsa key pair
     
-    priv = [pair.n, pair.d]
-    pub = [pair.n, pair.e]
+    priv = [pair.n, pair.d] # assigning private key part
+    pub = [pair.n, pair.e] # assigning public key part
     
-    return [priv, pub]
+    return [priv, pub] # returning the private key - public key pair
