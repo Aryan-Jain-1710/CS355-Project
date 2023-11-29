@@ -38,10 +38,7 @@ def client_program():
     server_public_key_e = client_socket.recv(50)    # receiving server public key (e)
     server_public_key_e = int.from_bytes(server_public_key_e, "big")    # converting (e) from bytes to int
     
-    # print("\nrecd server n:",skeyn, sep="\n")
-    # print("\nrecd server e:",skeye, sep="\n")
-
-
+    
 
 
 
@@ -59,17 +56,8 @@ def client_program():
 
     # SENDING CLIENT PUBLIC KEY (n and e)
     print("\nSending Client public key to Server...")
-
-    # print("\nclient pub e as int:")
-    # print(cpub[1])
-    # print("\nclient pub n as int:")
-    # print(cpub[0])
-
     client_socket.send(client_public_key_n)
-    # print("sent client n")
-
     client_socket.send(client_public_key_e)
-    # print("sent client e")
 
 
 
@@ -110,7 +98,6 @@ def client_program():
             print("Closing connection...")
             client_socket.close()
             break
-        # print(f"{servfile} received!\n\n")
 
 
 

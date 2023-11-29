@@ -25,12 +25,6 @@ def server_program():
     server_public_key_n = server_public_key[0].to_bytes(1000, 'big')
     server_public_key_e = server_public_key[1].to_bytes(50, 'big')
     
-    # print("\nserver pub e as int:")
-    # print(server_public_key[1])
-    
-    # print("\nserver pub n as int:")
-    # print(server_public_key[0])
-
 
 
 
@@ -76,10 +70,6 @@ def server_program():
 
     client_public_key_e = conn.recv(50)    # receiving client public key (e)
     client_public_key_e = int.from_bytes(client_public_key_e, "big")    # converting (e) from bytes to int
-
-    # print("\nrecd client n:",client_public_key_n, sep="\n")    
-    # print("\nrecd client e:",ckeye, sep="\n")
-
 
 
 

@@ -1,6 +1,4 @@
-import sys
 import hashlib
-# from hashlib import sha256
 
 
 def hashfile(file):
@@ -26,11 +24,14 @@ def hashfile(file):
 	return sha256.digest()
 
 
+
+
 def sim_check2(c, s):
-	# if len(x) != 1:
-	# 	print("invalid")
-	# elif len(y) != 1:
-	# 	print("invalid")
+
+	if len(c) != 5:
+		print("invalid")
+	elif len(s) != 5:
+		print("invalid")
 	
 	client_matches = []
 	server_matches = []
@@ -45,27 +46,3 @@ def sim_check2(c, s):
 	server_matches = list(set(server_matches))
 
 	return [client_matches, server_matches]
-
-
-
-def sim_check(x, y):
-
-	# if len(x) != 1:
-	# 	print("invalid")
-	# elif len(y) != 1:
-	# 	print("invalid")
-	
-	match = []
-
-	for i in range(len(x)):
-		for j in range(len(y)):
-			if x[i] == y[j] and x[i] not in match:
-				match.append
-
-	for i in x:
-		for j in y:
-			if (i == j) and (i not in match):
-				match.append(i)
-
-	print(str(len(match)) + " matches found!")
-	print(match)
