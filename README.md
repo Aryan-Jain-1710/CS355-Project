@@ -11,6 +11,7 @@ The protocol's objective is to identify common files between Alice and Bob witho
 - Both Alice and Bob operate with incredible hostility, so they will exploit any local data they receive through the client-socket channel. They are also unwilling to share the actual contents of their files.
 - Adversaries attempting to attack the communication channel are anticipated.
 
+---
 
 <br/>
 
@@ -86,6 +87,7 @@ The protocol's objective is to identify common files between Alice and Bob witho
 -  https://realpython.com/python-sockets/
    -  for socket programming in python
 
+---
 
 <br/>
 
