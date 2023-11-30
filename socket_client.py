@@ -151,7 +151,7 @@ def client_program():
 
     
     print("\n-----------------------------------------------------------------")
-    print("\nFiles that match with Client:")
+    print("\nFiles that match with Server:")
 
     if len(client_matches) > 0:
         for index in client_matches:
